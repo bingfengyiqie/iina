@@ -1519,21 +1519,19 @@ class PlayerCore: NSObject {
   }
 
   func getMusicMetadata() -> (title: String, album: String, artist: String) {
+    let dict = info.cachedMetadata[info.currentURL?.path ?? ""]
+    var title = dict?.title
+    let album = dict?.album
+    let artist = dict?.artist
     if mpv.getInt(MPVProperty.chapters) > 0 {
       let chapter = mpv.getInt(MPVProperty.chapter)
-      let chapterTitle = mpv.getString(MPVProperty.chapterListNTitle(chapter))
-      return (
-        chapterTitle ?? mpv.getString(MPVProperty.mediaTitle) ?? "",
-        mpv.getString("metadata/by-key/album") ?? "",
-        mpv.getString("chapter-metadata/by-key/performer") ?? mpv.getString("metadata/by-key/artist") ?? ""
-      )
-    } else {
-      return (
-        mpv.getString(MPVProperty.mediaTitle) ?? "",
-        mpv.getString("metadata/by-key/album") ?? "",
-        mpv.getString("metadata/by-key/artist") ?? ""
-      )
+      title = mpv.getString(MPVProperty.chapterListNTitle(chapter))
     }
+    return (
+      title ?? "",
+      album ?? "",
+      artist ?? ""
+   )
   }
 
   /** Check if there are IINA filters saved in watch_later file. */

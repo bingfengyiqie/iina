@@ -502,13 +502,11 @@ class PlaylistViewController: NSViewController, NSTableViewDataSource, NSTableVi
             }
           } else {
             // get related data and schedule a reload
-            if Preference.bool(for: .prefetchPlaylistVideoDuration) {
-              player.playlistQueue.async {
-                self.player.refreshCachedVideoInfo(forVideoPath: item.filename)
-                self.refreshTotalLength()
-                DispatchQueue.main.async {
-                  self.playlistTableView.reloadData(forRowIndexes: IndexSet(integer: row), columnIndexes: IndexSet(integersIn: 0...1))
-                }
+            player.playlistQueue.async {
+              self.player.refreshCachedVideoInfo(forVideoPath: item.filename)
+              self.refreshTotalLength()
+              DispatchQueue.main.async {
+                self.playlistTableView.reloadData(forRowIndexes: IndexSet(integer: row), columnIndexes: IndexSet(integersIn: 0...1))
               }
             }
           }
